@@ -4,6 +4,7 @@ import ru.javawebinar.topjava.model.Meal;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,12 +33,14 @@ public class MealRepository implements CrudRepository<Meal> {
 
     @Override
     public List<Meal> findAll() {
-        return null;
+        return new ArrayList<>(meals.values());
     }
 
     @Override
     public Meal create(Meal meal) {
-        return null;
+        meal.setId(counter.incrementAndGet());
+        meals.put(counter.get(), meal);
+        return meal;
     }
 
     @Override
