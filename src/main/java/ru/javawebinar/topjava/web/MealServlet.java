@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -20,6 +21,9 @@ public class MealServlet extends HttpServlet {
     private static final LocalTime START_TIME = LocalTime.MIN;
     private static final LocalTime END_TIME = LocalTime.MAX;
     private static final int CALORIES_PER_DAY = 2000;
+
+    private static final String INSERT_OR_EDIT = "/meal.jsp";
+    private static final String LIST_MEAL = "/meals.jsp";
 
     private CrudRepository<Meal> repository;
 
@@ -32,18 +36,35 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
 
+        String forward="";
         String action = request.getParameter("action");
-        if (action != null && action.equalsIgnoreCase("delete")){
+        if (action == null) {
+            forward = LIST_MEAL;
+            request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), START_TIME, END_TIME, CALORIES_PER_DAY));
+        } else if (action.equalsIgnoreCase("delete")) {
             int mealId = Integer.parseInt(request.getParameter("mealId"));
             repository.delete(mealId);
+            forward = LIST_MEAL;
+            request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), START_TIME, END_TIME, CALORIES_PER_DAY));
+        } else if (action.equalsIgnoreCase("insert")) {
+            forward = INSERT_OR_EDIT;
         }
 
-        request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), START_TIME, END_TIME, CALORIES_PER_DAY));
-        request.getRequestDispatcher("/meals.jsp").forward(request, response);
+        request.getRequestDispatcher(forward).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
 
+        LocalDateTime localDateTime = LocalDateTime.parse(request.getParameter("localDateTime"));
+        String description = request.getParameter("description");
+        int calories = Integer.parseInt(request.getParameter("calories"));
+
+        Meal meal = new Meal(localDateTime, description, calories);
+        repository.create(meal);
+
+        request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), START_TIME, END_TIME, CALORIES_PER_DAY));
+        request.getRequestDispatcher(LIST_MEAL).forward(request, response);
     }
 }

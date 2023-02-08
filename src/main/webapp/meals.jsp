@@ -9,6 +9,7 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Meals</h2>
+<a href="meals?action=insert">Add Meal</a>
 <table border="1">
     <tr>
         <th>Date</th>
@@ -16,7 +17,6 @@
         <th>Calories</th>
     </tr>
     <jsp:useBean id="meals" scope="request" type="java.util.List"/>
-<%--    <jsp:useBean id="mealServlet" scope="request" type="ru.javawebinar.topjava.web.MealServlet"/>--%>
     <c:forEach items="${meals}" var="meal">
         <c:set var="excessColor" value="${meal.excess?'red':'green'}"/>
         <tr style="color: ${excessColor}">
