@@ -24,14 +24,19 @@ public class MealServlet extends HttpServlet {
     private CrudRepository<Meal> repository;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
+    public void init() {
         repository = new MealRepository();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to meals");
+
+        String action = request.getParameter("action");
+        if (action != null && action.equalsIgnoreCase("delete")){
+            int mealId = Integer.parseInt(request.getParameter("mealId"));
+            repository.delete(mealId);
+        }
 
         request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), START_TIME, END_TIME, CALORIES_PER_DAY));
         request.getRequestDispatcher("/meals.jsp").forward(request, response);

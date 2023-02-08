@@ -16,20 +16,18 @@
         <th>Calories</th>
     </tr>
     <jsp:useBean id="meals" scope="request" type="java.util.List"/>
+<%--    <jsp:useBean id="mealServlet" scope="request" type="ru.javawebinar.topjava.web.MealServlet"/>--%>
     <c:forEach items="${meals}" var="meal">
         <c:set var="excessColor" value="${meal.excess?'red':'green'}"/>
         <tr style="color: ${excessColor}">
             <td>
-                <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
+                <fmt:parseDate value="${meal.dateTime}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
                                type="both"/>
-                <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${ parsedDateTime }"/>
+                <fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${parsedDateTime}"/>
             </td>
-            <td>
-                <c:out value="${meal.description}"/>
-            </td>
-            <td>
-                <c:out value="${meal.calories}"/>
-            </td>
+            <td><c:out value="${meal.description}"/></td>
+            <td><c:out value="${meal.calories}"/></td>
+            <td><a href="meals?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
         </tr>
     </c:forEach>
 </table>
