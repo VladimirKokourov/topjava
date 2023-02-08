@@ -22,7 +22,8 @@ public class MealServlet extends HttpServlet {
     private static final LocalTime END_TIME = LocalTime.MAX;
     private static final int CALORIES_PER_DAY = 2000;
 
-    private static final String INSERT_OR_EDIT = "/meal.jsp";
+    private static final String INSERT = "/add-meal.jsp";
+    private static final String EDIT = "/edit-meal.jsp";
     private static final String LIST_MEAL = "/meals.jsp";
 
     private CrudRepository<Meal> repository;
@@ -47,7 +48,10 @@ public class MealServlet extends HttpServlet {
             forward = LIST_MEAL;
             request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), START_TIME, END_TIME, CALORIES_PER_DAY));
         } else if (action.equalsIgnoreCase("insert")) {
-            forward = INSERT_OR_EDIT;
+            forward = INSERT;
+        } else if (action.equalsIgnoreCase("edit")) {
+            request.setAttribute("meal", repository.findById(Integer.parseInt(request.getParameter("mealId"))));
+            forward = EDIT;
         }
 
         request.getRequestDispatcher(forward).forward(request, response);
@@ -61,8 +65,14 @@ public class MealServlet extends HttpServlet {
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
 
-        Meal meal = new Meal(localDateTime, description, calories);
-        repository.create(meal);
+        Meal meal;
+        if (request.getParameter("mealId") != null) {
+           meal = new Meal(Integer.parseInt(request.getParameter("mealId")), localDateTime, description, calories);
+           repository.update(meal);
+        } else {
+            meal = new Meal(localDateTime, description, calories);
+            repository.create(meal);
+        }
 
         request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), START_TIME, END_TIME, CALORIES_PER_DAY));
         request.getRequestDispatcher(LIST_MEAL).forward(request, response);

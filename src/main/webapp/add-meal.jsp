@@ -1,6 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html lang="ru">
 <head>
     <title>Add Meal</title>
@@ -13,7 +11,8 @@
     Date : <input type="datetime-local" name="localDateTime"><br><br>
     Description: <input type="text" name="description"><br><br>
     Calories: <input type="text" name="calories"><br><br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Add">
+    <button onclick="window.history.back()" type="button">Cancel</button>
 </form>
 </body>
 </html>

@@ -10,6 +10,7 @@
 <hr>
 <h2>Meals</h2>
 <a href="meals?action=insert">Add Meal</a>
+<br><br>
 <table border="1">
     <tr>
         <th>Date</th>
@@ -27,6 +28,7 @@
             </td>
             <td><c:out value="${meal.description}"/></td>
             <td><c:out value="${meal.calories}"/></td>
+            <td><a href="meals?action=edit&mealId=<c:out value="${meal.id}"/>">Update</a></td>
             <td><a href="meals?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
         </tr>
     </c:forEach>
