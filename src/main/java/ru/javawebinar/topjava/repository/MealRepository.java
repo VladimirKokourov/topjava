@@ -12,11 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealRepository implements CrudRepository<Meal> {
 
-    private final AtomicInteger counter = new AtomicInteger();
-
+    private final AtomicInteger counter;
     private final Map<Integer, Meal> meals;
 
     public MealRepository() {
+        counter = new AtomicInteger();
         meals = new ConcurrentHashMap<>();
         create(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500));
         create(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
@@ -28,7 +28,7 @@ public class MealRepository implements CrudRepository<Meal> {
     }
 
     public Meal findById(int id) {
-        return null;
+        return meals.get(id);
     }
 
     @Override
@@ -45,11 +45,11 @@ public class MealRepository implements CrudRepository<Meal> {
 
     @Override
     public Meal update(Meal meal) {
-        return null;
+        return meals.replace(meal.getId(), meal);
     }
 
     @Override
-    public void delete(int id) {
-
+    public boolean delete(int id) {
+        return meals.remove(id) != null;
     }
 }
