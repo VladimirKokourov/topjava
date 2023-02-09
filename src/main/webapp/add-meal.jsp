@@ -10,7 +10,7 @@
 <form action="meals" method="post">
     Date : <input type="datetime-local" name="localDateTime"><br><br>
     Description: <input type="text" name="description"><br><br>
-    Calories: <input type="text" name="calories"><br><br>
+    Calories: <input type="number" name="calories"><br><br>
     <input type="submit" value="Add">
     <button onclick="window.history.back()" type="button">Cancel</button>
 </form>
