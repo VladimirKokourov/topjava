@@ -29,31 +29,35 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init() {
         repository = new MealRepositoryInMemory();
+        log.debug("init repository");
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        log.debug("redirect to meals");
-
         String action = request.getParameter("action");
         if (action == null) {
+            log.debug("redirect to meals");
             request.setAttribute("meals", MealsUtil.filteredByStreams(repository.findAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
             request.getRequestDispatcher(LIST_MEAL).forward(request, response);
         } else {
+            log.debug("doGet with action: {}", action);
             switch (action) {
                 case "delete": {
                     int mealId = getParseInt(request, "mealId");
                     repository.delete(mealId);
+                    log.debug("delete meal with id {}", mealId);
                     response.sendRedirect("meals");
                 }
                 break;
                 case "insert": {
                     request.getRequestDispatcher(INSERT).forward(request, response);
+                    log.debug("forward to add-meal");
                 }
                 break;
                 case "edit": {
                     request.setAttribute("meal", repository.findById(getParseInt(request, "mealId")));
                     request.getRequestDispatcher(EDIT).forward(request, response);
+                    log.debug("forward to edit-meal");
                 }
                 break;
                 default: {
@@ -70,13 +74,16 @@ public class MealServlet extends HttpServlet {
         LocalDateTime localDateTime = LocalDateTime.parse(request.getParameter("localDateTime"));
         String description = request.getParameter("description");
         int calories = getParseInt(request, "calories");
+        log.debug("getParameters: {}, {}, {}", localDateTime, description, calories);
 
         if (request.getParameter("mealId") != null) {
             Meal meal = new Meal(getParseInt(request, "mealId"), localDateTime, description, calories);
             repository.update(meal);
+            log.debug("update meal with id: {}", meal.getId());
         } else {
             Meal meal = new Meal(localDateTime, description, calories);
             repository.create(meal);
+            log.debug("create new meal");
         }
 
         response.sendRedirect("meals");
