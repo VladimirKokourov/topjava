@@ -9,7 +9,7 @@
 <hr>
 <h2>Update Meal</h2>
 <form action="meals" method="post">
-    Meal ID : <input type="text" readonly="readonly" name="mealId" value="${meal.id}"><br><br>
+    <input type="hidden" readonly="readonly" name="mealId" value="${meal.id}">
     Date : <input type="datetime-local" name="localDateTime" value="${meal.dateTime}"><br><br>
     Description: <input type="text" name="description" value="${meal.description}"><br><br>
     Calories: <input type="number" name="calories" value="${meal.calories}"><br><br>
