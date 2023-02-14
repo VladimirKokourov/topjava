@@ -1,16 +1,16 @@
 package ru.javawebinar.topjava.service;
 
-import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
-@Service
 public class MealService {
 
     private final MealRepository repository;
@@ -32,6 +32,8 @@ public class MealService {
     }
 
     public List<Meal> getAll(int userId) {
+//        List<Meal> list = new ArrayList<>(repository.getAll(userId));
+//        return list.isEmpty() ? Collections.emptyList() : list;
         return new ArrayList<>(repository.getAll(userId));
     }
 
