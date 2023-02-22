@@ -31,18 +31,24 @@ public class MealTestData {
     public static final Meal meal5 = new Meal(MEAL_ID_5, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000);
     public static final Meal meal6 = new Meal(MEAL_ID_6, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500);
     public static final Meal meal7 = new Meal(MEAL_ID_7, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
-    public static final Meal admins_meal = new Meal(ADMINS_MEAL_ID, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак Админа", 500);
+    public static final Meal adminsMeal = new Meal(ADMINS_MEAL_ID, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак Админа", 500);
 
     public static Meal getNew() {
         return new Meal(null, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "New Meal", 1999);
     }
 
     public static Meal getUpdated() {
-        Meal updated = new Meal(admins_meal);
+        Meal updated = new Meal(adminsMeal);
         updated.setDateTime(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 10));
         updated.setDescription("Updated");
         updated.setCalories(2018);
         return updated;
+    }
+
+    public static Meal getNotExistMeal() {
+        Meal notExist = new Meal(adminsMeal);
+        notExist.setId(NOT_FOUND_MEAL_ID);
+        return notExist;
     }
 
     public static void assertMatch(Meal actual, Meal expected) {

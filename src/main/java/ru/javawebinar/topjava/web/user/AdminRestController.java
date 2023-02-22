@@ -9,11 +9,7 @@ import java.util.List;
 @Controller
 public class AdminRestController extends AbstractUserController {
 
-    public AdminRestController() {
-        super();
-    }
-
-    public AdminRestController(UserService service) {
+    protected AdminRestController(UserService service) {
         super(service);
     }
 

@@ -13,8 +13,6 @@ import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
@@ -90,12 +88,14 @@ public class MealServiceTest {
 
     @Test
     public void updateNotFound() {
-        assertThrows(NotFoundException.class, () -> service.delete(NOT_FOUND_MEAL_ID, USER_ID));
+        Meal notExist = MealTestData.getNotExistMeal();
+        assertThrows(NotFoundException.class, () -> service.update(notExist, ADMIN_ID));
     }
 
     @Test
     public void updateNotOwnMeal() {
-        assertThrows(NotFoundException.class, () -> service.delete(ADMINS_MEAL_ID, USER_ID));
+        Meal updated = MealTestData.getUpdated();
+        assertThrows(NotFoundException.class, () -> service.update(updated, USER_ID));
     }
 
     @Test
@@ -111,7 +111,6 @@ public class MealServiceTest {
     @Test
     public void duplicateDateCreate() {
         assertThrows(DataAccessException.class, () ->
-                service.create(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0),
-                        "Dublicate", 777), USER_ID));
+                service.create(new Meal(meal1.getDateTime(), "Duplicate", 777), USER_ID));
     }
 }
