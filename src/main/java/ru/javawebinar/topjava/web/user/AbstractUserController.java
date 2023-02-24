@@ -14,14 +14,8 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkNew;
 public abstract class AbstractUserController {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    private UserService service;
-
-    public AbstractUserController() {
-    }
-
-    public AbstractUserController(UserService service) {
-        this.service = service;
-    }
+    @Autowired
+    protected UserService service;
 
     public List<User> getAll() {
         log.info("getAll");
@@ -53,5 +47,9 @@ public abstract class AbstractUserController {
     public User getByMail(String email) {
         log.info("getByEmail {}", email);
         return service.getByEmail(email);
+    }
+
+    public void setService(UserService service) {
+        this.service = service;
     }
 }
